@@ -120,16 +120,16 @@ public class List <F>{
 	}
 
 	public void invertWithoutPointersR() {
-		int size = this.count(), i=0, j=0;
+		int size = this.count();
 		if(size > 1){
-			invertWithoutPointersR(head.getNext(), head.getNext(), size, (int)size/2 , i, j);
+			invertWithoutPointersR(head.getNext(), head.getNext(), size, (int)size/2 , 0, 0);
 		}
 	}
 
 	public void invertWithoutPointers(){
 		int size = this.count(), i=0, j=0, times;
 		if(size > 1){
-			times = (int)size/2;
+			times = size/2;
 			Node<F> actualNode, initial = head.getNext();
 			while(i<times){
 				actualNode = initial;
