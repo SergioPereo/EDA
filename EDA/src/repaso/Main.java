@@ -60,7 +60,7 @@ public class Main {
 //		System.out.println(list.printLikeQueue());
 //		list.invertWithoutPointersR();
 //		System.out.println(list.printLikeQueue());
-		permutations("abcsf");
+		permutations("abcs");
 	}
 
 }
