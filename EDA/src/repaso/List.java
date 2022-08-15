@@ -113,7 +113,6 @@ public class List <F>{
 			if(j < (size-i-1)) {
 				invertWithoutPointersR(actual.getNext(), initial, size, times, i, j+1);
 			} else {
-				System.out.println(initial + " " + actual);
 				this.swapValue(initial, actual);
 				invertWithoutPointersR(initial.getNext(), initial.getNext(), size, times, i+1, i+1);
 			}
