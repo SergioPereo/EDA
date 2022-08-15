@@ -27,8 +27,8 @@ public class Main {
 		list.insertEnd(11);
 
 		System.out.println(list.printLikeQueue());
-		System.out.println(list.printLikeStack());
-		System.out.println(list.count());
+		list.invertWithoutPointersR();
+		System.out.println(list.printLikeQueue());
 	}
 
 }

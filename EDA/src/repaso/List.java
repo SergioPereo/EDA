@@ -67,6 +67,24 @@ public class List <F>{
 		return c;
 	}
 
+	private void invertWithPointersR(Node<F> previous, Node<F> actual, Node<F> next) {
+		if(next != null) {
+			invertWithPointersR(actual, next, actual.getNext());
+			actual.setNext(previous);
+		} else {
+			if(previous != null) {
+				head.getNext().setNext(null);
+				head.setNext(actual);
+			}
+		}
+	}
+
+	public void invertWithPointersR() {
+		if(head.getNext() != null){
+			invertWithPointersR(null, head.getNext(), head.getNext().getNext());
+		}
+	}
+
 	public void invertWithPointers(){
 		if(head.getNext() != null){
 			Node<F> actualNode = head.getNext(), previousNode = null, nextNode = head.getNext().getNext();
@@ -90,8 +108,27 @@ public class List <F>{
 		b.setValue(value);
 	}
 
+	private void invertWithoutPointersR(Node<F> actual, Node<F>  initial, int size, int times, int i, int j) {
+		if(i < times) {
+			if(j < (size-i-1)) {
+				invertWithoutPointersR(actual.getNext(), initial, size, times, i, j+1);
+			} else {
+				System.out.println(initial + " " + actual);
+				this.swapValue(initial, actual);
+				invertWithoutPointersR(initial.getNext(), initial.getNext(), size, times, i+1, i+1);
+			}
+		}
+	}
+
+	public void invertWithoutPointersR() {
+		int size = this.count(), i=0, j=0;
+		if(size > 1){
+			invertWithoutPointersR(head.getNext(), head.getNext(), size, (int)size/2 , i, j);
+		}
+	}
+
 	public void invertWithoutPointers(){
-		int size = this.count(), i=0, times, j=0;
+		int size = this.count(), i=0, j=0, times;
 		if(size > 1){
 			times = (int)size/2;
 			Node<F> actualNode, initial = head.getNext();
