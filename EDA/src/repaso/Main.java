@@ -7,6 +7,8 @@
  */
 package repaso;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author Sergio Pereo
@@ -43,6 +45,84 @@ public class Main {
 		System.out.println("Cantidad de permutaciones: " + count);
 		count = 0;
 	}
+	
+	public static int numberOfDiscrepancies(LinkedList<String> normal, LinkedList<String> toFix) {
+		boolean appeared = false;
+		int res = 0;
+		for(String a:normal) {
+			for(String b:toFix) {
+				if(a.equals(b)) {
+					appeared = true;
+					break;
+				}
+			}
+			if(!appeared) {
+				res++;
+			} else {
+				appeared = !appeared;
+			}
+		}
+		return res;
+	}
+	
+	public static LinkedList<String> listOf(String s1) {
+		LinkedList<String> normal = new LinkedList<String>();
+		for(int i = 0 ; i < s1.length() ; i++) {
+			if(i<s1.length()-1) {
+				normal.add((s1.charAt(i)+ "" +s1.charAt(i+1)));
+			} else {
+				normal.add(s1.charAt(i) + "");
+			}
+		}
+		return normal;
+	}
+	
+	public static int minFixes(String s1, String s2) {
+		List<String> discrepancies = new List<String>();
+		LinkedList<String> normal = new LinkedList<String>(), toFix = new LinkedList<String>();
+		if(s1.length() == 0) {
+			return s2.length();
+		}
+		if(s2.length() == 0) {
+			return s1.length();
+		}
+		return numberOfDiscrepancies(listOf(s1),listOf(s2));
+	}
+	
+	public static String tail(String s) {
+		return s.substring(1);
+	}
+	
+	public static int lev(String s1, String s2) {
+		System.out.println("between: " + s1 + " and " + s2);
+		count++;
+		if(s1.length() == 0) {
+			return s2.length();
+		}
+		if(s2.length() == 0) {
+			return s1.length();
+		}
+		if(s1.charAt(0) == s2.charAt(0)) {
+			return lev(tail(s1), tail(s2));
+		}
+		return Math.min(Math.min(lev(tail(s1), s2)+1, lev(s1, tail(s2))+1), lev(tail(s1), tail(s2))+1);
+	}
+	
+	public static int optLev(String s1, String s2, int[][] values, int i, int j) {
+		System.out.println("between: " + s1 + " and " + s2);
+		if(i < s1.length()) {
+		}
+		if(values[i][j] == -1) {
+			count++;
+			if(s1.charAt(0) == s2.charAt(0)) {
+				values[i][j] = optLev(tail(s1), tail(s2), values, i+1, j+1);
+				return values[i][j];
+			}
+			values[i][j] = Math.min(Math.min(optLev(tail(s1), s2, values, i+1, j)+1, optLev(s1, tail(s2), values, i, j+1)+1), optLev(tail(s1), tail(s2), values, i+1, j+1)+1);
+			return values[i][j];
+		}
+		return values[i][j];
+	}
 
 	/**
 	 * @param args the command line arguments
@@ -60,7 +140,23 @@ public class Main {
 //		System.out.println(list.printLikeQueue());
 //		list.invertWithoutPointersR();
 //		System.out.println(list.printLikeQueue());
-		permutations("abcs");
+//		permutations("abcs");
+		String s1 = "salvado", s2 = "serpiente";
+		int[][] values = new int[s1.length()][s2.length()];
+		for(int i = 0 ; i < s1.length() ; i++) {
+			for(int j = 0 ; j < s2.length() ; j++) {
+				if(i == 0) {
+					values[i][j] = j;
+				} else if(j == 0) {
+					values[i][j] = i;
+				} else {
+					values[i][j] = -1;
+				}
+			}
+		}
+		System.out.println(optLev("salvado", "serpiente", values, 0, 0));
+		System.out.println("Execution times: " + count);
+		count = 0;
 	}
 
 }
