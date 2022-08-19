@@ -46,49 +46,6 @@ public class Main {
 		count = 0;
 	}
 	
-	public static int numberOfDiscrepancies(LinkedList<String> normal, LinkedList<String> toFix) {
-		boolean appeared = false;
-		int res = 0;
-		for(String a:normal) {
-			for(String b:toFix) {
-				if(a.equals(b)) {
-					appeared = true;
-					break;
-				}
-			}
-			if(!appeared) {
-				res++;
-			} else {
-				appeared = !appeared;
-			}
-		}
-		return res;
-	}
-	
-	public static LinkedList<String> listOf(String s1) {
-		LinkedList<String> normal = new LinkedList<String>();
-		for(int i = 0 ; i < s1.length() ; i++) {
-			if(i<s1.length()-1) {
-				normal.add((s1.charAt(i)+ "" +s1.charAt(i+1)));
-			} else {
-				normal.add(s1.charAt(i) + "");
-			}
-		}
-		return normal;
-	}
-	
-	public static int minFixes(String s1, String s2) {
-		List<String> discrepancies = new List<String>();
-		LinkedList<String> normal = new LinkedList<String>(), toFix = new LinkedList<String>();
-		if(s1.length() == 0) {
-			return s2.length();
-		}
-		if(s2.length() == 0) {
-			return s1.length();
-		}
-		return numberOfDiscrepancies(listOf(s1),listOf(s2));
-	}
-	
 	public static String tail(String s) {
 		return s.substring(1);
 	}
@@ -109,19 +66,40 @@ public class Main {
 	}
 	
 	public static int optLev(String s1, String s2, int[][] values, int i, int j) {
-		System.out.println("between: " + s1 + " and " + s2);
-		if(i < s1.length()) {
-		}
-		if(values[i][j] == -1) {
-			count++;
-			if(s1.charAt(0) == s2.charAt(0)) {
-				values[i][j] = optLev(tail(s1), tail(s2), values, i+1, j+1);
+		if(i >= 0 && j >= 0) {
+			if(values[i][j] == -1) {
+				count++;
+				if(i==0 && j == 0) {
+					values[i][j] = 0;
+					return values[i][j];
+				}
+				if(i==0) {
+					values[i][j] = s2.length();
+					return values[i][j];
+				}
+				if(j==0) {
+					values[i][j] = s1.length();
+					return values[i][j];
+				}
+				if(s1.charAt(0) == s2.charAt(0)) {
+					values[i][j] = optLev(tail(s1), tail(s2), values, i-1, j-1);
+					return values[i][j];
+				}
+				values[i][j] = Math.min(Math.min(optLev(tail(s1), s2, values, i-1, j)+1, optLev(s1, tail(s2), values, i, j-1)+1), optLev(tail(s1), tail(s2), values, i-1, j-1)+1);
 				return values[i][j];
 			}
-			values[i][j] = Math.min(Math.min(optLev(tail(s1), s2, values, i+1, j)+1, optLev(s1, tail(s2), values, i, j+1)+1), optLev(tail(s1), tail(s2), values, i+1, j+1)+1);
 			return values[i][j];
 		}
-		return values[i][j];
+		return 0;
+	}
+	
+	public static void printMatrix(int[][] matrix) {
+		for(int i = 0 ; i < matrix.length ; i++) {
+			for(int j = 0 ; j < matrix[0].length ; j++) {
+				System.out.print(matrix[i][j] + "\t");
+			}
+			System.out.print("\n");
+		}
 	}
 
 	/**
@@ -142,21 +120,23 @@ public class Main {
 //		System.out.println(list.printLikeQueue());
 //		permutations("abcs");
 		String s1 = "salvado", s2 = "serpiente";
-		int[][] values = new int[s1.length()][s2.length()];
-		for(int i = 0 ; i < s1.length() ; i++) {
-			for(int j = 0 ; j < s2.length() ; j++) {
-				if(i == 0) {
-					values[i][j] = j;
-				} else if(j == 0) {
-					values[i][j] = i;
-				} else {
-					values[i][j] = -1;
-				}
+		int[][] values = new int[s1.length()+1][s2.length()+1];
+		for (int i = 0; i < s1.length(); i++) {
+			for (int j = 0; j < s2.length(); j++) {
+//				if (i == 0) {
+//					values[i][j] = j;
+//				} else if (j == 0) {
+//					values[i][j] = i;
+//				} else {
+				values[i][j] = -1;
+//				}
 			}
 		}
-		System.out.println(optLev("salvado", "serpiente", values, 0, 0));
+		System.out.println("Minimum changes: " + optLev(s1, s2, values, s1.length()-1, s2.length()-1));
+		printMatrix(values);
+		
+		
 		System.out.println("Execution times: " + count);
-		count = 0;
 	}
 
 }
