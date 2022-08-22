@@ -66,31 +66,28 @@ public class Main {
 	}
 	
 	public static int optLev(String s1, String s2, int[][] values, int i, int j) {
-		if(i >= 0 && j >= 0) {
-			if(values[i][j] == -1) {
-				count++;
-				if(i==0 && j == 0) {
-					values[i][j] = 0;
-					return values[i][j];
-				}
-				if(i==0) {
-					values[i][j] = s2.length();
-					return values[i][j];
-				}
-				if(j==0) {
-					values[i][j] = s1.length();
-					return values[i][j];
-				}
-				if(s1.charAt(0) == s2.charAt(0)) {
-					values[i][j] = optLev(tail(s1), tail(s2), values, i-1, j-1);
-					return values[i][j];
-				}
-				values[i][j] = Math.min(Math.min(optLev(tail(s1), s2, values, i-1, j)+1, optLev(s1, tail(s2), values, i, j-1)+1), optLev(tail(s1), tail(s2), values, i-1, j-1)+1);
+		if(values[i][j] == -1) {
+			count++;
+			if(i==0 && j == 0) {
+				values[i][j] = 0;
 				return values[i][j];
 			}
+			if(i==0) {
+				values[i][j] = s2.length();
+				return values[i][j];
+			}
+			if(j==0) {
+				values[i][j] = s1.length();
+				return values[i][j];
+			}
+			if(s1.charAt(0) == s2.charAt(0)) {
+				values[i][j] = optLev(tail(s1), tail(s2), values, i-1, j-1);
+				return values[i][j];
+			}
+			values[i][j] = Math.min(Math.min(optLev(tail(s1), s2, values, i-1, j)+1, optLev(s1, tail(s2), values, i, j-1)+1), optLev(tail(s1), tail(s2), values, i-1, j-1)+1);
 			return values[i][j];
 		}
-		return 0;
+		return values[i][j];
 	}
 	
 	public static void printMatrix(int[][] matrix) {
