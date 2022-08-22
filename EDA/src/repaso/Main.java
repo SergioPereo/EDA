@@ -50,6 +50,16 @@ public class Main {
 		return s.substring(1);
 	}
 	
+	public static int eDistance(String s1, String s2, int cont) {
+		if(s1.length() == 0 || s2.length() == 0) {
+			return cont + (s1.length() + s2.length());
+		}
+		if(s1.charAt(0) == s2.charAt(0)) {
+			return eDistance(tail(s1), tail(s2), cont);
+		}
+		return Math.min(Math.min(eDistance(tail(s1), s2, cont+1), eDistance(s1, tail(s2), cont+1)), eDistance(tail(s1), tail(s2), cont+1));
+	}
+	
 	public static int lev(String s1, String s2) {
 		System.out.println("between: " + s1 + " and " + s2);
 		count++;
@@ -129,8 +139,9 @@ public class Main {
 //				}
 			}
 		}
-		System.out.println("Minimum changes: " + optLev(s1, s2, values, s1.length()-1, s2.length()-1));
-		printMatrix(values);
+		System.out.println(eDistance(s1, s2, 0));
+		//System.out.println("Minimum changes: " + optLev(s1, s2, values, s1.length()-1, s2.length()-1));
+		//printMatrix(values);
 		
 		
 		System.out.println("Execution times: " + count);
