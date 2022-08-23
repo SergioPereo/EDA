@@ -100,6 +100,44 @@ public class Main {
 		return values[i][j];
 	}
 	
+	public static int minimum(int[] arr) {
+		if(arr.length > 0) {
+			int value = arr[0], index = 0;
+			for(int i = 1 ; i < arr.length ; i++) {
+				if(arr[i] < value) {
+					value = arr[i];
+					index = i;
+				}
+			}
+			return index;
+		}
+		return 0;
+	}
+	
+	public static void swap(int[] arr, int i1, int i2) {
+		int temp = arr[i1];
+		arr[i1] = arr[i2];
+		arr[i2] = arr[temp];
+	}
+	
+	public static void insertionnSort(int[] arr) {
+		for(int i = 0 ; i < arr.length ; i++) {
+			int minimal = minimum(arr);
+		}
+	}
+	
+	public static void insertionSort(int[] arr) {
+		int value = arr[0], index = 0;
+		for(int i = 0 ; i < arr.length ; i++) {
+			for(int j = i ; j < arr.length-i ; j++) {
+				if(arr[j] < value) {
+					value = arr[j];
+					index = j;
+				}
+			}
+		}
+	}
+	
 	public static void printMatrix(int[][] matrix) {
 		for(int i = 0 ; i < matrix.length ; i++) {
 			for(int j = 0 ; j < matrix[0].length ; j++) {
