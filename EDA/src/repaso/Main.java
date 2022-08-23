@@ -17,16 +17,6 @@ public class Main {
 	
 	public static int count = 0;
 	
-	public static String pop(String s, int index) {
-		String res = "";
-		for(int i = 0 ; i < s.length() ; i++) {
-			if(i != index) {
-				res+=s.charAt(i);
-			}
-		}
-		return res;
-	}
-	
 	public static void permutationsR(String s, String res) {
 		if(s.length() > 0) {
 			for(int i = 0 ; i < s.length() ; i++) {
@@ -43,21 +33,20 @@ public class Main {
 	public static void permutations(String s) {
 		permutationsR(s, "");
 		System.out.println("Cantidad de permutaciones: " + count);
-		count = 0;
 	}
 	
 	public static String tail(String s) {
 		return s.substring(1);
 	}
 	
-	public static int eDistance(String s1, String s2, int cont) {
+	public static int eLev(String s1, String s2, int cont) {
 		if(s1.length() == 0 || s2.length() == 0) {
 			return cont + (s1.length() + s2.length());
 		}
 		if(s1.charAt(0) == s2.charAt(0)) {
-			return eDistance(tail(s1), tail(s2), cont);
+			return eLev(tail(s1), tail(s2), cont);
 		}
-		return Math.min(Math.min(eDistance(tail(s1), s2, cont+1), eDistance(s1, tail(s2), cont+1)), eDistance(tail(s1), tail(s2), cont+1));
+		return Math.min(Math.min(eLev(tail(s1), s2, cont+1), eLev(s1, tail(s2), cont+1)), eLev(tail(s1), tail(s2), cont+1));
 	}
 	
 	public static int lev(String s1, String s2) {
@@ -76,67 +65,44 @@ public class Main {
 	}
 	
 	public static int optLev(String s1, String s2, int[][] values, int i, int j) {
-		if(values[i][j] == -1) {
-			count++;
-			if(i==0 && j == 0) {
-				values[i][j] = 0;
-				return values[i][j];
-			}
-			if(i==0) {
-				values[i][j] = s2.length();
-				return values[i][j];
-			}
-			if(j==0) {
-				values[i][j] = s1.length();
-				return values[i][j];
-			}
-			if(s1.charAt(0) == s2.charAt(0)) {
-				values[i][j] = optLev(tail(s1), tail(s2), values, i-1, j-1);
-				return values[i][j];
-			}
-			values[i][j] = Math.min(Math.min(optLev(tail(s1), s2, values, i-1, j)+1, optLev(s1, tail(s2), values, i, j-1)+1), optLev(tail(s1), tail(s2), values, i-1, j-1)+1);
-			return values[i][j];
-		}
-		return values[i][j];
-	}
-	
-	public static int minimum(int[] arr) {
-		if(arr.length > 0) {
-			int value = arr[0], index = 0;
-			for(int i = 1 ; i < arr.length ; i++) {
-				if(arr[i] < value) {
-					value = arr[i];
-					index = i;
-				}
-			}
-			return index;
-		}
 		return 0;
 	}
 	
 	public static void swap(int[] arr, int i1, int i2) {
+		System.out.println("I1: " + arr[i1] + " I2: " + arr[i2]);
 		int temp = arr[i1];
 		arr[i1] = arr[i2];
-		arr[i2] = arr[temp];
-	}
-	
-	public static void insertionnSort(int[] arr) {
-		for(int i = 0 ; i < arr.length ; i++) {
-			int minimal = minimum(arr);
-		}
+		arr[i2] = temp;
 	}
 	
 	public static void insertionSort(int[] arr) {
-		if(arr.length > 0) {
-			int value, index = 0;
+		if(arr.length > 1) {
+			int value, index;
 			for(int i = 0 ; i < arr.length ; i++) {
-				for(int j = i ; j < arr.length-i ; j++) {
+				value = arr[i];
+				index = i;
+				for(int j = i+1 ; j < arr.length ; j++) {
 					if(arr[j] < value) {
 						value = arr[j];
 						index = j;
 					}
+					System.out.println("J: " + j);
+					count++;
 				}
+				swap(arr, i, index);
 			}	
+		}
+	}
+	
+	public static void printArray(int[] arr) {
+		System.out.print("[");
+		int i = 0;
+		for(int a : arr) {
+			if(i == arr.length-1)
+				System.out.println(a + "]");
+			else
+				System.out.println(a + ", ");
+			i++;
 		}
 	}
 	
@@ -148,43 +114,64 @@ public class Main {
 			System.out.print("\n");
 		}
 	}
+	
+	public static void permutationsTest() {
+		permutations("absc");
+	}
+	
+	public static void levTest() {
+		
+		List<Integer> list = new List<Integer>();
+
+		list.insertEnd(1);
+		list.insertEnd(3);
+		list.insertEnd(6);
+		list.insertEnd(8);
+		list.insertEnd(11);
+
+		System.out.println(list.printLikeQueue());
+		list.invertWithoutPointersR();
+		System.out.println(list.printLikeQueue());
+		permutations("abcs");
+		String s1 = "salvado", s2 = "serpiente";
+		int[][] values = new int[s1.length()+1][s2.length()+1];
+		for (int i = 0; i < s1.length(); i++) {
+			for (int j = 0; j < s2.length(); j++) {
+				if (i == 0) {
+					values[i][j] = j;
+				} else if (j == 0) {
+					values[i][j] = i;
+				} else {
+				values[i][j] = -1;
+				}
+			}
+		}
+		System.out.println(eLev(s1, s2, 0));
+		System.out.println("Minimum changes: " + optLev(s1, s2, values, s1.length()-1, s2.length()-1));
+		printMatrix(values);
+		System.out.println("Execution times: " + count);
+	}
+	
+	public static void sortTest() {
+		int[] arr = {4, -2, 5, 100, -234, 2, 1, 5, 3 ,64, -234};
+		insertionSort(arr);
+		printArray(arr);
+		System.out.println("Execution times: " + count);
+	}
 
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
 		// TODO code application logic here
-//		List<Integer> list = new List<Integer>();
-//
-//		list.insertEnd(1);
-//		list.insertEnd(3);
-//		list.insertEnd(6);
-//		list.insertEnd(8);
-//		list.insertEnd(11);
-//
-//		System.out.println(list.printLikeQueue());
-//		list.invertWithoutPointersR();
-//		System.out.println(list.printLikeQueue());
-//		permutations("abcs");
-		String s1 = "salvado", s2 = "serpiente";
-		int[][] values = new int[s1.length()+1][s2.length()+1];
-		for (int i = 0; i < s1.length(); i++) {
-			for (int j = 0; j < s2.length(); j++) {
-//				if (i == 0) {
-//					values[i][j] = j;
-//				} else if (j == 0) {
-//					values[i][j] = i;
-//				} else {
-				values[i][j] = -1;
-//				}
-			}
-		}
-		System.out.println(eDistance(s1, s2, 0));
-		//System.out.println("Minimum changes: " + optLev(s1, s2, values, s1.length()-1, s2.length()-1));
-		//printMatrix(values);
+		//Permutations
+		permutationsTest();
 		
+		//Levshtein Distance
+		//levTest();
 		
-		System.out.println("Execution times: " + count);
+		//Sorting
+		//sortTest();
 	}
 
 }
