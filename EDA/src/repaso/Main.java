@@ -127,14 +127,16 @@ public class Main {
 	}
 	
 	public static void insertionSort(int[] arr) {
-		int value = arr[0], index = 0;
-		for(int i = 0 ; i < arr.length ; i++) {
-			for(int j = i ; j < arr.length-i ; j++) {
-				if(arr[j] < value) {
-					value = arr[j];
-					index = j;
+		if(arr.length > 0) {
+			int value, index = 0;
+			for(int i = 0 ; i < arr.length ; i++) {
+				for(int j = i ; j < arr.length-i ; j++) {
+					if(arr[j] < value) {
+						value = arr[j];
+						index = j;
+					}
 				}
-			}
+			}	
 		}
 	}
 	
