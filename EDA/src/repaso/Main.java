@@ -69,35 +69,39 @@ public class Main {
 	}
 	
 	public static void swap(int[] arr, int i1, int i2) {
-		System.out.println("I1: " + arr[i1] + " I2: " + arr[i2]);
+		//System.out.println("I1: " + arr[i1] + " I2: " + arr[i2]);
 		int temp = arr[i1];
 		arr[i1] = arr[i2];
 		arr[i2] = temp;
 	}
 	
-	public static void insertionSort(int[] arr) {
-		if(arr.length > 1) {
-			int value, index;
-			for(int i = 0 ; i < arr.length ; i++) {
-				value = arr[i];
-				index = i;
-				for(int j = i+1 ; j < arr.length ; j++) {
-					if(arr[j] < value) {
-						value = arr[j];
-						index = j;
-					}
-					System.out.println("J: " + j);
-					count++;
-				}
-				swap(arr, i, index);
-			}	
+	private static int partition(int[] arr, int start, int end) {
+		int pivot = start;
+		for(int i = start+1 ; i < (end-start)+start ; i++) {
+			if(arr[pivot] > arr[i]) {
+				pivot = i;
+			}
 		}
+		return 0;
 	}
 	
-	public static void printArray(int[] arr) {
+	private static void quickSort(int[] arr, int start, int end) {
+		if(start >= end) {
+			return;
+		}
+		int middle = partition(arr, start, end);
+		quickSort(arr, start, middle);
+		quickSort(arr, middle+1, end);
+	}
+	
+	public static void quickSort(int[] arr) {
+		
+	}
+	
+	public static <T extends Comparable<T>> void printArray(T[] arr) {
 		System.out.print("[");
 		int i = 0;
-		for(int a : arr) {
+		for(T a : arr) {
 			if(i == arr.length-1)
 				System.out.println(a + "]");
 			else
@@ -153,10 +157,67 @@ public class Main {
 	}
 	
 	public static void sortTest() {
-		int[] arr = {4, -2, 5, 100, -234, 2, 1, 5, 3 ,64, -234};
-		insertionSort(arr);
+		Integer[] arr = {4, -2, 5, 100, -234, 2, 1, 5, 3 ,64, -234};
+		Sorts.insertionSort(arr);
 		printArray(arr);
 		System.out.println("Execution times: " + count);
+	}
+	
+	public static void printTestStack(TestResponse[] tR) {
+		for(int i = 0 ; i < tR.length ; i++){
+			if(tR[i] != null)
+				System.out.println("Array: " + tR[i].getArraySize() + " time: " + tR[i].getTime().toMillis() + " milliseconds and " + tR[i].getCount() + " steps");
+		}
+	}
+	
+	public static void printComparison(ComparisonResponse comparison) {
+		if(comparison.getOffsetTimeSum() > 0) {
+			System.out.println("B is better in time than A");
+		} else if(comparison.getOffsetTimeSum() < 0) {
+			System.out.println("A is better in time than B");
+		} else {
+			System.out.println("Are equal in time");
+		}
+		if(comparison.getOffsetStepsSum() > 0) {
+			System.out.println("B is better in steps than A");
+		} else if(comparison.getOffsetStepsSum() < 0) {
+			System.out.println("A is better in steps than B");
+		} else {
+			System.out.println("Are equal in steps");
+		}
+	}
+	
+	public static void testToCsv(TestResponse[] tR) {
+		for(int i = 0 ; i < tR.length ; i++){
+			if(tR[i] != null)
+				System.out.println(tR[i].getArraySize() + "," + tR[i].getTime().toMillis() + "," + tR[i].getCount());
+		}
+		System.out.println();
+	}
+
+	public static void generateCsv() {
+		Integer arr[] = Tests.generateArray(10100, 100000000);
+		TestResponse[] a = Tests.bubbleSortTest(arr);
+		TestResponse[] b = Tests.insertionSortTest(arr);
+		System.out.println("Bubble Sort");
+		testToCsv(a);
+		System.out.println("Insertion Sort");
+		testToCsv(b);
+		
+	}
+	
+	public static void comparisonSortingTest() {
+		Integer arr[] = Tests.generateArray(10000, 100000000);
+		TestResponse[] a = Tests.bubbleSortTest(arr);
+		TestResponse[] b = Tests.insertionSortTest(arr);
+		printComparison(Tests.checkWhosBetter(a, b, 3, 10));
+		
+	}
+	
+	public static void previewSortingTest() {
+		Integer arr[] = Tests.generateArray(10000, 100000000);
+		TestResponse[] testStack = Tests.bubbleSortTest(arr);
+		printTestStack(testStack);
 	}
 
 	/**
@@ -165,13 +226,21 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO code application logic here
 		//Permutations
-		permutationsTest();
+		//permutationsTest();
 		
 		//Levshtein Distance
 		//levTest();
 		
 		//Sorting
 		//sortTest();
+		
+		//Previews
+		//previewSortingTest();
+		
+		//Comparisons
+		//comparisonSortingTest();
+	
+		generateCsv();
 	}
 
 }
