@@ -1,11 +1,12 @@
 package repaso;
 
+import java.util.Random;
+
 public class Sorts {
 	
 	public static int count = 0;
 	
 	public static <T extends Comparable<T>> void swap(T[] arr, int i1, int i2) {
-		//System.out.println("I1: " + arr[i1] + " I2: " + arr[i2]);
 		T temp = arr[i1];
 		arr[i1] = arr[i2];
 		arr[i2] = temp;
@@ -64,6 +65,40 @@ public class Sorts {
 				j = 0;
 			}
 		}
+		return count;
+	}
+	
+	private static <T extends Comparable<T>> int partition(T[] arr, int start, int end) {
+		Random rnd = new Random();
+		int pivot = ((int)rnd.nextDouble()*(end-start)) + start, bigPlaceHolder = end-1, i = start+1;
+		swap(arr, start, pivot);
+		pivot = start;
+		while(i <= bigPlaceHolder) {
+			if(arr[pivot].compareTo(arr[i])>0) {
+				swap(arr, pivot, i);
+				pivot = i;
+				i++;
+			} else {
+				swap(arr, i, bigPlaceHolder);
+				bigPlaceHolder--; 
+			}
+			count++;
+		}
+		return pivot;
+	}
+	
+	private static <T extends Comparable<T>> void quickSort(T[] arr, int start, int end) {
+		if(start >= end) {
+			return;
+		}
+		int pivot = partition(arr, start, end);
+		quickSort(arr, start, pivot);
+		quickSort(arr, pivot+1, end);
+	}
+	
+	public static <T extends Comparable<T>> int quickSort(T[] arr) {
+		count = 0;
+		quickSort(arr, 0, arr.length);
 		return count;
 	}
 	
