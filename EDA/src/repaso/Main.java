@@ -4,20 +4,27 @@ package repaso;
  *
  * @author Sergio Pereo
  * 
- * Review class that will be used to program tests and/or some exercises to refresh recursion, sorting and DS concepts.
+ *         Review class that will be used to program tests and/or some exercises
+ *         to refresh recursion, sorting and DS concepts.
  * 
  */
 public class Main {
-
+	public static void swap(int[] arr, int i1, int i2) {
+		int temp = arr[i1];
+		arr[i1] = arr[i2];
+		arr[i2] = temp;
+	}
 
 	/**
-	 * Counter that is used to count things in the algorithms, since steps to results.
+	 * Counter that is used to count things in the algorithms, since steps to
+	 * results.
 	 *
 	 */
 	private static int count = 0;
 
 	/**
-	 * Private method that do the permutations of a given string. Count is used to store all the permutations.
+	 * Private method that do the permutations of a given string. Count is used to
+	 * store all the permutations.
 	 *
 	 * @param s string to be permuted
 	 */
@@ -33,9 +40,10 @@ public class Main {
 			count++;
 		}
 	}
-	
+
 	/**
-	 * Method that give you all the different possible permutations of the given string
+	 * Method that give you all the different possible permutations of the given
+	 * string
 	 *
 	 * @param s string to be permuted
 	 */
@@ -55,13 +63,15 @@ public class Main {
 	}
 
 	/**
-	 * Class version of the levenshtein distance algorithm (the version with the specifications given by my professor)
-	 * It uses recursion to explore all the possible solutions and return the minimal one.
+	 * My class version of the levenshtein distance algorithm (the version with the
+	 * specifications given by my professor) It uses recursion to explore all the
+	 * possible solutions and return the minimal one.
 	 *
-	 * @param s1 the string you will be looking forward to transform.
-	 * @param s2 the string to which you will try to transform s1.
+	 * @param s1   the string you will be looking forward to transform.
+	 * @param s2   the string to which you will try to transform s1.
 	 * @param cont the counter for the operations.
-	 * @return the minimal amount of operations you need to do to transform s1 into s2.
+	 * @return the minimal amount of operations you need to do to transform s1 into
+	 *         s2.
 	 */
 	public static int eLev(String s1, String s2, int cont) {
 		if (s1.length() == 0 || s2.length() == 0) {
@@ -75,11 +85,13 @@ public class Main {
 	}
 
 	/**
-	 * Original version of the levenshtein distance algorithm. It uses recursion to explore all the possible solutions and return the minimal one.
+	 * Original version of the levenshtein distance algorithm. It uses recursion to
+	 * explore all the possible solutions and return the minimal one.
 	 *
 	 * @param s1 the string you will be looking forward to transform.
 	 * @param s2 the string to which you will try to transform s1.
-	 * @return the minimal amount of operations you need to do to transform s1 into s2.
+	 * @return the minimal amount of operations you need to do to transform s1 into
+	 *         s2.
 	 */
 	public static int lev(String s1, String s2) {
 		count++;
@@ -96,13 +108,15 @@ public class Main {
 	}
 
 	/**
-	 * Optimized version of the levenshtein distance algorithm. It uses a matrix to avoid repeating the comparison of the same strings.
-	 * This one is the private method that do the algorithm in a iterative way.
+	 * Optimized version of the levenshtein distance algorithm. It uses a matrix to
+	 * avoid repeating the comparison of the same strings. This one is the private
+	 * method that do the algorithm in a iterative way.
 	 *
-	 * @param s1 the string you will be looking forward to transform.
-	 * @param s2 the string to which you will try to transform s1.
+	 * @param s1     the string you will be looking forward to transform.
+	 * @param s2     the string to which you will try to transform s1.
 	 * @param values the matrix where the comparisons will be saved.
-	 * @return the minimal amount of operations you need to do to transform s1 into s2.
+	 * @return the minimal amount of operations you need to do to transform s1 into
+	 *         s2.
 	 */
 	private static int optLev(String s1, String s2, int[][] values) {
 		count = 0;
@@ -120,11 +134,13 @@ public class Main {
 	}
 
 	/**
-	 * Optimized version of the levenshtein distance algorithm. It uses a matrix to avoid repeating the comparison of the same strings.
+	 * Optimized version of the levenshtein distance algorithm. It uses a matrix to
+	 * avoid repeating the comparisons of the same strings.
 	 *
 	 * @param s1 the string you will be looking forward to transform.
 	 * @param s2 the string to which you will try to transform s1.
-	 * @return the minimal amount of operations you need to do to transform s1 into s2.
+	 * @return the minimal amount of operations you need to do to transform s1 into
+	 *         s2.
 	 */
 	public static int optLev(String s1, String s2) {
 		// Initialize the matrix in where I will store the comparisons
@@ -145,30 +161,12 @@ public class Main {
 		return values[values.length - 1][values[0].length - 1];
 	}
 
-	public static int[] mergeMix(int[] arr1, int[] arr2) {
-		int max = arr1.length + arr2.length;
-		int[] res = new int[max];
-		int i = 0, j = 0;
-		for (int k = 0; k < max; k++) {
-			if (arr1[i] < arr2[j]) {
-				res[k] = arr1[i];
-				i++;
-			} else {
-				res[k] = j;
-				j++;
-			}
-		}
-		return res;
-	}
-
-	public static void mergeMixSort(int[] arr, int min, int max) {
-		int[][] initialState = new int[arr.length][];
-		for (int i = 0; i < max; i++) {
-			initialState[i] = new int[] { arr[i] };
-		}
-
-	}
-
+	/**
+	 * Prints an array of generic types.
+	 *
+	 * @param arr the generic array.
+	 * 
+	 */
 	public static <T extends Comparable<T>> void printArray(T[] arr) {
 		System.out.print("[");
 		int i = 0;
@@ -182,6 +180,12 @@ public class Main {
 		System.out.println();
 	}
 
+	/**
+	 * Prints an array of ints.
+	 *
+	 * @param arr the int array.
+	 * 
+	 */
 	public static void printArray(int arr[]) {
 		System.out.print("[");
 		int i = 0;
@@ -195,6 +199,12 @@ public class Main {
 		System.out.println();
 	}
 
+	/**
+	 * Prints a matrix of ints.
+	 *
+	 * @param arr the int matrix.
+	 * 
+	 */
 	public static void printMatrix(int[][] matrix) {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[0].length; j++) {
@@ -204,7 +214,13 @@ public class Main {
 		}
 	}
 
-	public static void printTestStack(TestResponse[] tR) {
+	/**
+	 * Prints all tests of the experiment.
+	 *
+	 * @param tR the array of tests.
+	 * 
+	 */
+	public static void printTests(TestResponse[] tR) {
 		for (int i = 0; i < tR.length; i++) {
 			if (tR[i] != null)
 				System.out.println("Array: " + tR[i].getArraySize() + " time: " + tR[i].getTime().toMillis()
@@ -212,6 +228,13 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Tells you if the algorithms are better and/or equal in steps and time based
+	 * on the differences in steps and time.
+	 *
+	 * @param comparison the comparison of both algorithms.
+	 * 
+	 */
 	public static void printComparison(ComparisonResponse comparison) {
 		if (comparison.getOffsetTimeSum() > 0) {
 			System.out.println("B is better in time than A");
@@ -229,6 +252,12 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Prints the test response in a csv form to use it somewhere else.
+	 *
+	 * @param tR the array of tests that an algorithm has.
+	 * 
+	 */
 	public static void testToCsv(TestResponse[] tR) {
 		for (int i = 0; i < tR.length; i++) {
 			if (tR[i] != null)
@@ -237,6 +266,11 @@ public class Main {
 		System.out.println();
 	}
 
+	/**
+	 * Generate the csv of the desired algorithms. Probably need to parametrize this
+	 * function to avoid code changing.
+	 * 
+	 */
 	public static void generateCsv() {
 		Integer arr[] = Tests.generateArray(10100, 100000000);
 		TestResponse[] a = Tests.bubbleSortTest(arr);
@@ -248,11 +282,22 @@ public class Main {
 
 	}
 
-	public static void permutationsTest() {
-		permutations("absc");
-		System.out.println("Execution times: " + count);
+	/**
+	 * Prints all the possible permutations of the input string.
+	 *
+	 * @param s input string that need to be permutated.
+	 * 
+	 */
+	public static void permutationsTest(String s) {
+		permutations(s);
+		System.out.println("Quantity of permutations: " + count);
 	}
 
+	/**
+	 * Tests of the lists implementation, this is mainly just a desired test placed
+	 * in a function to avoid overcharging the main method.
+	 * 
+	 */
 	public static void listTest() {
 		List<Integer> list = new List<Integer>();
 
@@ -267,8 +312,14 @@ public class Main {
 		System.out.println(list.printLikeQueue());
 	}
 
+	/**
+	 * This tests prints the result of the levenshtein algorithm both in the
+	 * recursive way and the optimized iterative way. It also prints the resulting
+	 * matrix of the optimized levenshtein algorithm.
+	 * 
+	 */
 	public static void levTest() {
-		System.out.println("Levshtein Original");
+		System.out.println("Levenshtein Original");
 		System.out.println("Mínimo de operaciones: " + lev("icor", "rico"));
 		System.out.println("Cantidad de operaciones del algoritmo: " + count);
 		System.out.println("Levshtein Optimizado");
@@ -276,13 +327,23 @@ public class Main {
 		System.out.println("Cantidad de operaciones del algoritmo: " + count);
 	}
 
+	/**
+	 * This function can be used to make tests of the sorting methods of the Sorts
+	 * class.
+	 * 
+	 */
 	public static void sortTest() {
-		Integer[] arr = { 4, -2, 5, 100, -234, 2, 1, 5, 3, 64, -234 };
-		count = Sorts.quickSort(arr);
+		Integer[] arr = { 4, -2, 5, 100, -234, 2, 1, 5, 3, 64, -234, 4, 24, 3, 5, 35, -350 };
+		count = Sorts.mergeMixSort(arr);
 		printArray(arr);
 		System.out.println("Execution times: " + count);
 	}
 
+	/**
+	 * This test compare two sorting algorithms. You can change this code to try
+	 * your own. This probably needs to be parametrized as well.
+	 * 
+	 */
 	public static void comparisonSortingTest() {
 		Integer arr[] = Tests.generateArray(10000, 100000000);
 		TestResponse[] a = Tests.bubbleSortTest(arr);
@@ -290,10 +351,16 @@ public class Main {
 		printComparison(Tests.checkWhosBetter(a, b, 3, 10));
 	}
 
+	/**
+	 * This test make an array of tests for the desired sorting algorithm. You can
+	 * change this code to try your own. This probably needs to be parametrized as
+	 * well.
+	 * 
+	 */
 	public static void previewSortingTest() {
 		Integer arr[] = Tests.generateArray(10000, 100000000);
 		TestResponse[] testStack = Tests.bubbleSortTest(arr);
-		printTestStack(testStack);
+		printTests(testStack);
 	}
 
 	/**
@@ -305,10 +372,10 @@ public class Main {
 		// permutationsTest();
 
 		// Levshtein Distance
-		levTest();
+		// levTest();
 
 		// Sorting
-		// sortTest();
+		sortTest();
 
 		// Previews
 		// previewSortingTest();
@@ -316,7 +383,10 @@ public class Main {
 		// Comparisons
 		// comparisonSortingTest();
 		// generateCsv();
-
+		// int[] arr = { 4, -2, 5, 100, -234, 2, 1, 5, 3, 64, -234, 4, 24, 3, 5, 35,
+		// -350 };
+		// mergeMixSort(arr, 0, arr.length);
+		// printArray(arr);
 	}
 
 }

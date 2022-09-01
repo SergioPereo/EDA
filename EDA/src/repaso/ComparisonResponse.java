@@ -1,5 +1,13 @@
 package repaso;
 
+/**
+*
+* @author Sergio Pereo
+* 
+*         Class used to store comparisons between test sets.
+* 
+*/
+
 public class ComparisonResponse {
 	
 	private int offsetTimeSum = 0;

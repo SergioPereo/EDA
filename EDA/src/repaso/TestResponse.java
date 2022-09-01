@@ -1,6 +1,14 @@
 package repaso;
 import java.time.*;
 
+/**
+*
+* @author Sergio Pereo
+* 
+*         Class used to store results of an efficiency test.
+* 
+*/
+
 public class TestResponse {
 
 	private int arraySize;
