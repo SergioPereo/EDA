@@ -1,4 +1,4 @@
-package repaso;
+package review;
 
 import java.time.*;
 import java.util.Random;
