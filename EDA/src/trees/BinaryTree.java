@@ -1,6 +1,6 @@
 package trees;
 
-public class BinaryTreeADT<T> implements TreeADT<T> {
+public class BinaryTree<T> implements TreeADT<T> {
 	
 	TreeNode<T> root;
 	
