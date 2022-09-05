@@ -172,7 +172,7 @@ public class Sorts {
 	 * @param end    end index of the second sub-array.
 	 */
 	private static <T extends Comparable<T>> void merge(T arr[], int start, int middle, int end) {
-		System.out.println("Start: " + start + " middle: " + middle + " end: " + end);
+		//System.out.println("Start: " + start + " middle: " + middle + " end: " + end);
 		T merged[] = (T[]) new Comparable[(end - start) + 1];
 		int k = start, j = middle;
 		for (int i = 0; i < merged.length; i++) {
@@ -181,10 +181,10 @@ public class Sorts {
 			} else if (j > end) {
 				merged[i] = arr[k++];
 			} else if (arr[k].compareTo(arr[j]) > 0) {
-				System.out.println("Arr[k]: " + arr[k] + " arr[j]: " + arr[j]);
+				//System.out.println("Arr[k]: " + arr[k] + " arr[j]: " + arr[j]);
 				merged[i] = arr[j++];
 			} else {
-				System.out.println("Arr[k]: " + arr[k] + " arr[j]: " + arr[j]);
+				//System.out.println("Arr[k]: " + arr[k] + " arr[j]: " + arr[j]);
 				merged[i] = arr[k++];
 			}
 			count++;
@@ -237,7 +237,7 @@ public class Sorts {
 		int middle = (start + end) / 2;
 		mergeSort(arr, start, middle);
 		mergeSort(arr, middle + 1, end);
-		mergeWthtArr(arr, start, middle + 1, end);
+		merge(arr, start, middle + 1, end);
 	}
 
 	/**
@@ -291,20 +291,20 @@ public class Sorts {
 	 * @param end   end index for this run of the algorithm.
 	 */
 	private static <T extends Comparable<T>> void mergeMixSort(T[] arr, int min, int max) {
-		ArrayList<ArrayList<Integer>> initialState = new ArrayList<ArrayList<Integer>>();
+		ArrayList<int[]> initialState = new ArrayList<int[]>();
 		for (int i = 0; i < max; i++) {
-			ArrayList<Integer> toAdd = new ArrayList<Integer>();
-			toAdd.add(i);
-			toAdd.add(i);
+			int[] toAdd = new int[2];
+			toAdd[0] = i;
+			toAdd[1] = i;
 			initialState.add(toAdd);
 		}
 		int i;
 		while (initialState.size() > 1) {
 			i = 0;
 			while (i < initialState.size() - 1) {
-				mergeMixWthtArr(arr, initialState.get(i).get(0), initialState.get(i + 1).get(0),
-						initialState.get(i + 1).get(1));
-				initialState.get(i).set(1, initialState.get(i + 1).get(1));
+				mergeMixWthtArr(arr, initialState.get(i)[0], initialState.get(i + 1)[0],
+						initialState.get(i + 1)[1]);
+				initialState.get(i)[1] = initialState.get(i + 1)[1];
 				initialState.remove(i + 1);
 				i++;
 			}

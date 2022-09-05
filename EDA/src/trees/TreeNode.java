@@ -1,6 +1,6 @@
 package trees;
 
-public class TreeNode<T> {
+public class TreeNode<T extends Comparable<T>> {
 
 	T element;
 	TreeNode<T> left, right;
@@ -16,6 +16,15 @@ public class TreeNode<T> {
 		if (right != null)
 			count += right.getDesc() + 1;
 		return count;
+	}
+
+	public void cuelga(TreeNode<T> newNode) {
+		if (newNode == null)
+			return;
+		if (element.compareTo(newNode.getElement()) > 0)
+			left = newNode;
+		else
+			right = newNode;
 	}
 
 	public T getElement() {

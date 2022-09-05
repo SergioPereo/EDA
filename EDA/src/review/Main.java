@@ -115,19 +115,26 @@ public class Main {
 	 * @param s1     the string you will be looking forward to transform.
 	 * @param s2     the string to which you will try to transform s1.
 	 * @param values the matrix where the comparisons will be saved.
+	 * @param delete the value of delete operation.
+	 * @param insert the value of insert operation.
+	 * @param substitution the value of substitution operation.
 	 * @return the minimal amount of operations you need to do to transform s1 into
 	 *         s2.
 	 */
-	private static int optLev(String s1, String s2, int[][] values) {
+	private static double optLev(String s1, String s2, double[][] values, int delete, int insert, int substitution) {
 		count = 0;
+		int sum = 0;
 		for (int i = 1; i < values.length; i++) {
 			for (int j = 1; j < values[0].length; j++) {
+
 				if (s1.charAt(i - 1) == s2.charAt(j - 1))
-					values[i][j] = Math.min(values[i - 1][j], Math.min(values[i][j - 1], values[i - 1][j - 1]));
+					sum = 0;
 				else
-					values[i][j] = Math.min(values[i - 1][j] + 1,
-							Math.min(values[i][j - 1] + 1, values[i - 1][j - 1] + 1));
+					sum = 1;
+				values[i][j] = Math.min(values[i - 1][j] + sum*delete,
+						Math.min(values[i][j - 1] + sum*insert, values[i - 1][j - 1] + sum*substitution));
 				count++;
+				sum = 0;
 			}
 		}
 		return values[values.length - 1][values[0].length - 1];
@@ -142,9 +149,9 @@ public class Main {
 	 * @return the minimal amount of operations you need to do to transform s1 into
 	 *         s2.
 	 */
-	public static int optLev(String s1, String s2) {
+	public static double optLev(String s1, String s2) {
 		// Initialize the matrix in where I will store the comparisons
-		int[][] values = new int[s1.length() + 1][s2.length() + 1];
+		double[][] values = new double[s1.length() + 1][s2.length() + 1];
 		for (int i = 0; i <= s1.length(); i++) {
 			for (int j = 0; j <= s2.length(); j++) {
 				if (i == 0) {
@@ -156,7 +163,7 @@ public class Main {
 				}
 			}
 		}
-		System.out.println("Minimum changes: " + optLev(s1, s2, values));
+		System.out.println("Minimum changes: " + optLev(s1, s2, values, 1, 1, 1));
 		printMatrix(values);
 		return values[values.length - 1][values[0].length - 1];
 	}
@@ -206,6 +213,21 @@ public class Main {
 	 * 
 	 */
 	public static void printMatrix(int[][] matrix) {
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				System.out.print(matrix[i][j] + "\t");
+			}
+			System.out.print("\n");
+		}
+	}
+	
+	/**
+	 * Prints a matrix of ints.
+	 *
+	 * @param arr the int matrix.
+	 * 
+	 */
+	public static void printMatrix(double[][] matrix) {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[0].length; j++) {
 				System.out.print(matrix[i][j] + "\t");
@@ -346,8 +368,8 @@ public class Main {
 	 */
 	public static void comparisonSortingTest() {
 		Integer arr[] = Tests.generateArray(10000, 100000000);
-		TestResponse[] a = Tests.bubbleSortTest(arr);
-		TestResponse[] b = Tests.insertionSortTest(arr);
+		TestResponse[] a = Tests.mergeMixSortTest(arr);
+		TestResponse[] b = Tests.mergeSortTest(arr);
 		printComparison(Tests.checkWhosBetter(a, b, 3, 10));
 	}
 
@@ -372,10 +394,10 @@ public class Main {
 		// permutationsTest();
 
 		// Levshtein Distance
-		// levTest();
+		levTest();
 
 		// Sorting
-		sortTest();
+		// sortTest();
 
 		// Previews
 		// previewSortingTest();
