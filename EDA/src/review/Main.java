@@ -1,5 +1,12 @@
 package review;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
 /**
  *
  * @author Sergio Pereo
@@ -112,11 +119,11 @@ public class Main {
 	 * avoid repeating the comparison of the same strings. This one is the private
 	 * method that do the algorithm in a iterative way.
 	 *
-	 * @param s1     the string you will be looking forward to transform.
-	 * @param s2     the string to which you will try to transform s1.
-	 * @param values the matrix where the comparisons will be saved.
-	 * @param delete the value of delete operation.
-	 * @param insert the value of insert operation.
+	 * @param s1           the string you will be looking forward to transform.
+	 * @param s2           the string to which you will try to transform s1.
+	 * @param values       the matrix where the comparisons will be saved.
+	 * @param delete       the value of delete operation.
+	 * @param insert       the value of insert operation.
 	 * @param substitution the value of substitution operation.
 	 * @return the minimal amount of operations you need to do to transform s1 into
 	 *         s2.
@@ -131,8 +138,8 @@ public class Main {
 					sum = 0;
 				else
 					sum = 1;
-				values[i][j] = Math.min(values[i - 1][j] + sum*delete,
-						Math.min(values[i][j - 1] + sum*insert, values[i - 1][j - 1] + sum*substitution));
+				values[i][j] = Math.min(values[i - 1][j] + sum * delete,
+						Math.min(values[i][j - 1] + sum * insert, values[i - 1][j - 1] + sum * substitution));
 				count++;
 				sum = 0;
 			}
@@ -220,7 +227,7 @@ public class Main {
 			System.out.print("\n");
 		}
 	}
-	
+
 	/**
 	 * Prints a matrix of ints.
 	 *
@@ -293,14 +300,9 @@ public class Main {
 	 * function to avoid code changing.
 	 * 
 	 */
-	public static void generateCsv() {
-		Integer arr[] = Tests.generateArray(10100, 100000000);
-		TestResponse[] a = Tests.bubbleSortTest(arr);
-		TestResponse[] b = Tests.insertionSortTest(arr);
-		System.out.println("Bubble Sort");
-		testToCsv(a);
-		System.out.println("Insertion Sort");
-		testToCsv(b);
+	public static void generateCsv(String title, TestResponse[] tR) {
+		System.out.println(title);
+		testToCsv(tR);
 
 	}
 
@@ -386,6 +388,129 @@ public class Main {
 	}
 
 	/**
+	 * Homework methods
+	 */
+
+	public static TestResponse[] averageOfTests(TestResponse[][] tests, int runs) {
+		TestResponse[] algorithmAverage = new TestResponse[tests[0].length];
+		for (int i = 0; i < algorithmAverage.length; i++) {
+			algorithmAverage[i] = new TestResponse(Duration.ZERO, tests[0][i].getArraySize(), 0);
+		}
+		for (int i = 0; i < runs; i++) {
+			for (int j = 0; j < algorithmAverage.length; j++) {
+				algorithmAverage[j].sum(tests[i][j]);
+			}
+		}
+		for (int i = 0; i < algorithmAverage.length; i++) {
+			algorithmAverage[i].setTime(algorithmAverage[i].getTime().dividedBy(runs));
+			algorithmAverage[i].setCount(algorithmAverage[i].getCount() / runs);
+		}
+		return algorithmAverage;
+	}
+
+	public static void getRandomTests(Movie[] movies, int runs) {
+
+		Movie[] toSort = (Movie[]) Tests.generateArrayCopy(movies);
+
+		TestResponse[][] bubble = new TestResponse[runs][];
+		TestResponse[][] selection = new TestResponse[runs][];
+		TestResponse[][] insertion = new TestResponse[runs][];
+		TestResponse[][] quick = new TestResponse[runs][];
+		TestResponse[][] merge = new TestResponse[runs][];
+		TestResponse[][] mergeMix = new TestResponse[runs][];
+
+		for (int i = 0; i < runs; i++) {
+			System.out.println("Doing the " + i + " run...");
+			Tests.shuffleArray(toSort);
+			bubble[i] = Tests.bubbleSortTest(toSort);
+			Tests.shuffleArray(toSort);
+			selection[i] = Tests.selectionSortTest(toSort);
+			Tests.shuffleArray(toSort);
+			insertion[i] = Tests.insertionSortTest(toSort);
+			Tests.shuffleArray(toSort);
+			quick[i] = Tests.quickSortTest(toSort);
+			Tests.shuffleArray(toSort);
+			merge[i] = Tests.mergeSortTest(toSort);
+			Tests.shuffleArray(toSort);
+			mergeMix[i] = Tests.mergeMixSortTest(toSort);
+		}
+
+		System.out.println("Doing averages...");
+		generateCsv("Bubble sort", averageOfTests(bubble, runs));
+		generateCsv("Selection sort", averageOfTests(selection, runs));
+		generateCsv("Insertion sort", averageOfTests(insertion, runs));
+		generateCsv("Quick sort", averageOfTests(quick, runs));
+		generateCsv("Merge sort", averageOfTests(merge, runs));
+		generateCsv("Merge Mixcoac sort", averageOfTests(mergeMix, runs));
+	}
+
+	public static void getInvSortedArrayTests(Movie[] movies) {
+
+		Movie[] toSort = Tests.generateSortedInvArray(movies);
+
+		TestResponse[] bubble = Tests.bubbleSortTest(toSort);
+		toSort = Tests.generateSortedInvArray(movies);
+		TestResponse[] selection = Tests.selectionSortTest(toSort);
+		toSort = Tests.generateSortedInvArray(movies);
+		TestResponse[] insertion = Tests.insertionSortTest(toSort);
+		toSort = Tests.generateSortedInvArray(movies);
+		TestResponse[] quick = Tests.quickSortTest(toSort);
+		toSort = Tests.generateSortedInvArray(movies);
+		TestResponse[] merge = Tests.mergeSortTest(toSort);
+		toSort = Tests.generateSortedInvArray(movies);
+		TestResponse[] mergeMix = Tests.mergeMixSortTest(toSort);
+
+		generateCsv("Bubble sort", bubble);
+		generateCsv("Selection sort", selection);
+		generateCsv("Insertion sort", insertion);
+		generateCsv("Quick sort", quick);
+		generateCsv("Merge sort", merge);
+		generateCsv("Merge Mixcoac sort", mergeMix);
+	}
+
+	public static void getSortedArrayTests(Movie[] movies) {
+
+		Movie[] toSort = Tests.generateSortedArray(movies);
+
+		TestResponse[] bubble = Tests.bubbleSortTest(toSort);
+		toSort = Tests.generateSortedArray(movies);
+		TestResponse[] selection = Tests.selectionSortTest(toSort);
+		toSort = Tests.generateSortedArray(movies);
+		TestResponse[] insertion = Tests.insertionSortTest(toSort);
+		toSort = Tests.generateSortedArray(movies);
+		TestResponse[] quick = Tests.quickSortTest(toSort);
+		toSort = Tests.generateSortedArray(movies);
+		TestResponse[] merge = Tests.mergeSortTest(toSort);
+		toSort = Tests.generateSortedArray(movies);
+		TestResponse[] mergeMix = Tests.mergeMixSortTest(toSort);
+
+		generateCsv("Bubble sort", bubble);
+		generateCsv("Selection sort", selection);
+		generateCsv("Insertion sort", insertion);
+		generateCsv("Quick sort", quick);
+		generateCsv("Merge sort", merge);
+		generateCsv("Merge Mixcoac sort", mergeMix);
+	}
+
+	public static Movie[] readFile() {
+		ArrayList<Movie> moviesList = new ArrayList<Movie>();
+		try {
+			File myObj = new File("movie_titles2.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				String[] info = data.split(",");
+				moviesList.add(new Movie(info[2], Integer.parseInt(info[0]), Integer.parseInt(info[1])));
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+		return moviesList.toArray(new Movie[moviesList.size()]);
+	}
+
+	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
@@ -394,7 +519,7 @@ public class Main {
 		// permutationsTest();
 
 		// Levshtein Distance
-		levTest();
+		// levTest();
 
 		// Sorting
 		// sortTest();
@@ -405,10 +530,11 @@ public class Main {
 		// Comparisons
 		// comparisonSortingTest();
 		// generateCsv();
-		// int[] arr = { 4, -2, 5, 100, -234, 2, 1, 5, 3, 64, -234, 4, 24, 3, 5, 35,
-		// -350 };
-		// mergeMixSort(arr, 0, arr.length);
-		// printArray(arr);
+
+		// Homework
+		//getRandomTests(readFile(), 30);
+		//getInvSortedArrayTests(readFile());
+		getSortedArrayTests(readFile());
 	}
 
 }

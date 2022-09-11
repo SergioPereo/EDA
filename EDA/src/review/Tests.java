@@ -1,6 +1,8 @@
 package review;
 
-import java.time.*;
+import java.lang.reflect.Array;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Random;
 
 /**
@@ -12,6 +14,20 @@ import java.util.Random;
  */
 
 public class Tests {
+
+	/**
+	 * Private method that copy a partition of the original array into the other
+	 * inverse order.
+	 *
+	 * @param arr      array that will be copied.
+	 * @param other    array in which arr will be copied.
+	 * @param endIndex the size of the partition.
+	 */
+	private static <T extends Comparable<T>> void invertArray(T[] arr) {
+		for (int i = 0; i < (arr.length / 2); i++) {
+			Sorts.swap(arr, i, arr.length - i - 1);
+		}
+	}
 
 	/**
 	 * Private method that copy a partition of the original array into the other.
@@ -65,10 +81,10 @@ public class Tests {
 		Instant startTime, endTime;
 		int count = 0;
 		T[] testCase;
-		TestResponse[] res = new TestResponse[arr.length];
-		for (int i = 0; i < arr.length; i += 100) {
-			testCase = (T[]) new Comparable[i];
-			copyPartitionArray(arr, testCase, i);
+		TestResponse[] res = new TestResponse[arr.length/500];
+		for (int i = 0; i < arr.length/500; i += 1) {
+			testCase = (T[]) new Comparable[i*500];
+			copyPartitionArray(arr, testCase, i*500);
 			startTime = Instant.now();
 			count = Sorts.bubbleSort(testCase);
 			endTime = Instant.now();
@@ -89,10 +105,10 @@ public class Tests {
 		Instant startTime, endTime;
 		int count = 0;
 		T[] testCase;
-		TestResponse[] res = new TestResponse[arr.length];
-		for (int i = 0; i < arr.length; i += 100) {
-			testCase = (T[]) new Comparable[i];
-			copyPartitionArray(arr, testCase, i);
+		TestResponse[] res = new TestResponse[arr.length/500];
+		for (int i = 0; i < arr.length/500; i += 1) {
+			testCase = (T[]) new Comparable[i*500];
+			copyPartitionArray(arr, testCase, i*500);
 			startTime = Instant.now();
 			count = Sorts.selectionSort(testCase);
 			endTime = Instant.now();
@@ -113,10 +129,10 @@ public class Tests {
 		Instant startTime, endTime;
 		int count = 0;
 		T[] testCase;
-		TestResponse[] res = new TestResponse[arr.length];
-		for (int i = 0; i < arr.length; i += 100) {
-			testCase = (T[]) new Comparable[i];
-			copyPartitionArray(arr, testCase, i);
+		TestResponse[] res = new TestResponse[arr.length/500];
+		for (int i = 0; i < arr.length/500; i += 1) {
+			testCase = (T[]) new Comparable[i*500];
+			copyPartitionArray(arr, testCase, i*500);
 			startTime = Instant.now();
 			count = Sorts.insertionSort(testCase);
 			endTime = Instant.now();
@@ -137,10 +153,10 @@ public class Tests {
 		Instant startTime, endTime;
 		int count = 0;
 		T[] testCase;
-		TestResponse[] res = new TestResponse[arr.length];
-		for (int i = 0; i < arr.length; i += 100) {
-			testCase = (T[]) new Comparable[i];
-			copyPartitionArray(arr, testCase, i);
+		TestResponse[] res = new TestResponse[arr.length/500];
+		for (int i = 0; i < arr.length/500; i += 1) {
+			testCase = (T[]) new Comparable[i*500];
+			copyPartitionArray(arr, testCase, i*500);
 			startTime = Instant.now();
 			count = Sorts.quickSort(testCase);
 			endTime = Instant.now();
@@ -161,10 +177,10 @@ public class Tests {
 		Instant startTime, endTime;
 		int count = 0;
 		T[] testCase;
-		TestResponse[] res = new TestResponse[arr.length];
-		for (int i = 0; i < arr.length; i += 100) {
-			testCase = (T[]) new Comparable[i];
-			copyPartitionArray(arr, testCase, i);
+		TestResponse[] res = new TestResponse[arr.length/500];
+		for (int i = 0; i < arr.length/500; i += 1) {
+			testCase = (T[]) new Comparable[i*500];
+			copyPartitionArray(arr, testCase, i*500);
 			startTime = Instant.now();
 			count = Sorts.mergeSort(testCase);
 			endTime = Instant.now();
@@ -185,10 +201,10 @@ public class Tests {
 		Instant startTime, endTime;
 		int count = 0;
 		T[] testCase;
-		TestResponse[] res = new TestResponse[arr.length];
-		for (int i = 0; i < arr.length; i += 100) {
-			testCase = (T[]) new Comparable[i];
-			copyPartitionArray(arr, testCase, i);
+		TestResponse[] res = new TestResponse[arr.length/500];
+		for (int i = 0; i < arr.length/500; i += 1) {
+			testCase = (T[]) new Comparable[i*500];
+			copyPartitionArray(arr, testCase, i*500);
 			startTime = Instant.now();
 			count = Sorts.mergeMixSort(testCase);
 			endTime = Instant.now();
@@ -212,6 +228,39 @@ public class Tests {
 			arr[i] = Integer.valueOf(rnd.nextInt(max));
 		}
 		return arr;
+	}
+
+	/**
+	 * Homework methods
+	 */
+
+	public static <T extends Comparable<T>> void shuffleArray(T[] arr) {
+		Random rnd = new Random();
+		for (int i = arr.length - 1; i > 0; i--) {
+			int index = rnd.nextInt(i + 1);
+			Sorts.swap(arr, i, index);
+		}
+	}
+
+	public static <T extends Comparable<T>> T[] generateArrayCopy(T[] arr) {
+		T[] toSort = (T[]) Array.newInstance(arr.getClass().getComponentType(), arr.length);
+		copyPartitionArray(arr, toSort, arr.length);
+		return toSort;
+	}
+
+	public static <T extends Comparable<T>> T[] generateSortedArray(T[] arr) {
+		T[] toSort = (T[]) Array.newInstance(arr.getClass().getComponentType(), arr.length);
+		copyPartitionArray(arr, toSort, arr.length);
+		Sorts.mergeSort(toSort);
+		return toSort;
+	}
+
+	public static <T extends Comparable<T>> T[] generateSortedInvArray(T[] arr) {
+		T[] toSortInv = (T[]) Array.newInstance(arr.getClass().getComponentType(), arr.length);
+		copyPartitionArray(arr, toSortInv, arr.length);
+		Sorts.mergeSort(toSortInv);
+		invertArray(toSortInv);
+		return toSortInv;
 	}
 
 }

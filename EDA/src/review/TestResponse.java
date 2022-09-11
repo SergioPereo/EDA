@@ -20,6 +20,16 @@ public class TestResponse {
 		this.arraySize = arraySize;
 		this.count = count;
 	}
+	
+	public void sum(TestResponse other) {
+		this.time = this.time.plus(other.getTime());
+		this.count += other.getCount();
+	}
+	
+	@Override
+	public String toString() {
+		return arraySize + "," + time.toMillis() + "," + count;
+	}
 
 	public Duration getTime() {
 		return time;
@@ -29,6 +39,17 @@ public class TestResponse {
 	}
 	public int getCount() {
 		return count;
+	}
+	public void setArraySize(int arraySize) {
+		this.arraySize = arraySize;
+	}
+
+	public void setTime(Duration time) {
+		this.time = time;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
 	}
 	
 }

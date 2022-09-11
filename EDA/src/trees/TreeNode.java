@@ -3,7 +3,7 @@ package trees;
 public class TreeNode<T extends Comparable<T>> {
 
 	T element;
-	TreeNode<T> left, right;
+	TreeNode<T> left, right, parent;
 
 	public TreeNode(T element) {
 		this.element = element;
@@ -34,6 +34,14 @@ public class TreeNode<T extends Comparable<T>> {
 	public void setElement(T element) {
 		this.element = element;
 	}
+	
+	public TreeNode<T> getParent(){
+		return parent;
+	}
+	
+	public void setParent(TreeNode<T> parent) {
+		this.parent = parent;
+	}
 
 	public TreeNode<T> getLeft() {
 		return left;
@@ -49,6 +57,15 @@ public class TreeNode<T extends Comparable<T>> {
 
 	public void setRight(TreeNode<T> right) {
 		this.right = right;
+	}
+	
+	public int quantityOfChilds() {
+		int res = 0;
+		if(left != null)
+			res++;
+		if(right != null)
+			res++;
+		return res;
 	}
 
 }

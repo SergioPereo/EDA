@@ -26,7 +26,7 @@ public class Sorts {
 	 * @param i1  first index.
 	 * @param i2  second index.
 	 */
-	private static <T extends Comparable<T>> void swap(T[] arr, int i1, int i2) {
+	public static <T extends Comparable<T>> void swap(T[] arr, int i1, int i2) {
 		T temp = arr[i1];
 		arr[i1] = arr[i2];
 		arr[i2] = temp;
@@ -172,7 +172,6 @@ public class Sorts {
 	 * @param end    end index of the second sub-array.
 	 */
 	private static <T extends Comparable<T>> void merge(T arr[], int start, int middle, int end) {
-		//System.out.println("Start: " + start + " middle: " + middle + " end: " + end);
 		T merged[] = (T[]) new Comparable[(end - start) + 1];
 		int k = start, j = middle;
 		for (int i = 0; i < merged.length; i++) {
@@ -181,17 +180,14 @@ public class Sorts {
 			} else if (j > end) {
 				merged[i] = arr[k++];
 			} else if (arr[k].compareTo(arr[j]) > 0) {
-				//System.out.println("Arr[k]: " + arr[k] + " arr[j]: " + arr[j]);
 				merged[i] = arr[j++];
 			} else {
-				//System.out.println("Arr[k]: " + arr[k] + " arr[j]: " + arr[j]);
 				merged[i] = arr[k++];
 			}
 			count++;
 		}
 		for (int i = 0; i < merged.length; i++) {
 			arr[start + i] = merged[i];
-			count++;
 		}
 	}
 
@@ -253,6 +249,38 @@ public class Sorts {
 	}
 
 	/**
+	 * Private method that merge two sorted and contiguous sub-arrays using
+	 * an extra array. This method is used by the merge mixcoac algorithm we talked
+	 * about in class.
+	 *
+	 * @param arr    array used by the algorithm.
+	 * @param start  start index of the first sub-array.
+	 * @param middle middle index that separated both arrays.
+	 * @param end    end index of the second sub-array.
+	 */
+	private static <T extends Comparable<T>> void mergeMix(T arr[], int start, int middle, int end) {
+		T merged[] = (T[]) new Comparable[(end - start) + 1];
+		int k = start, j = middle;
+		for (int i = 0; i < merged.length; i++) {
+			if (k >= middle) {
+				merged[i] = arr[j++];
+			} else if (j > end) {
+				merged[i] = arr[k++];
+			} else if (arr[k].compareTo(arr[j]) > 0) {
+				//System.out.println("Arr[k]: " + arr[k] + " arr[j]: " + arr[j]);
+				merged[i] = arr[j++];
+			} else {
+				//System.out.println("Arr[k]: " + arr[k] + " arr[j]: " + arr[j]);
+				merged[i] = arr[k++];
+			}
+			count++;
+		}
+		for (int i = 0; i < merged.length; i++) {
+			arr[start + i] = merged[i];
+		}
+	}
+	
+	/**
 	 * Private method that merge two sorted and contiguous sub-arrays without using
 	 * an extra array. This method is used by the merge mixcoac algorithm we talked
 	 * about in class.
@@ -302,7 +330,7 @@ public class Sorts {
 		while (initialState.size() > 1) {
 			i = 0;
 			while (i < initialState.size() - 1) {
-				mergeMixWthtArr(arr, initialState.get(i)[0], initialState.get(i + 1)[0],
+				mergeMix(arr, initialState.get(i)[0], initialState.get(i + 1)[0],
 						initialState.get(i + 1)[1]);
 				initialState.get(i)[1] = initialState.get(i + 1)[1];
 				initialState.remove(i + 1);
