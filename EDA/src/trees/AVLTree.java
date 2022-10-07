@@ -229,6 +229,13 @@ public class AVLTree<T extends Comparable<T>> implements TreeADT<T> {
 		}
 		return res;
 	}
+	
+	/**
+	 * Method that deletes an element to the tree.
+	 *
+	 * @param element value of the element to delete.
+	 * @return the deleted element.
+	 */
 
 	public AVLNode<T> delete(T element) {
 		AVLNode<T> toDelete = find(root, element);
@@ -253,7 +260,6 @@ public class AVLTree<T extends Comparable<T>> implements TreeADT<T> {
 		updateBalance(actual.getParent(), balances);
 	}
 	
-	//TODO list with the used balances that need to be added to the father and stop when the father update becomes 0 when updating check and rotate
 	private void add(T element, AVLNode<T> actual, AVLNode<T> parent, Stack<Integer> balances, int side) {
 		if(actual == null) {
 			AVLNode<T> newNode = new AVLNode<T>(element);
@@ -279,6 +285,11 @@ public class AVLTree<T extends Comparable<T>> implements TreeADT<T> {
 		
 	}
 	
+	/**
+	 * Method that adds an element to the tree. (Preferable it must be unique)
+	 *
+	 * @param element value of the element to add.
+	 */
 	public void add(T element) {
 		add(element, root, null, new Stack<Integer>(), 0);
 	}
@@ -315,6 +326,11 @@ public class AVLTree<T extends Comparable<T>> implements TreeADT<T> {
 		lookPath(root, element);
 	}
 	
+	/**
+	 * Method that prints the tree in a per-level order with their value and balances in a table format.
+	 *
+	 */
+	
 	public void printTree() {
 		AVLNode<T> actual;
 		ArrayList<AVLNode<T>> queue = new ArrayList<AVLNode<T>>();
@@ -340,7 +356,13 @@ public class AVLTree<T extends Comparable<T>> implements TreeADT<T> {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
+	/**
+	 * Method that check if a element is in the tree.
+	 *
+	 * @param element value of the element to check.
+	 * @return true if the element is in the array, false otherwise.
+	 */
 	@Override
 	public boolean find(T element) {
 		return find(root, element) != null;
