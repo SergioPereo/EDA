@@ -1,14 +1,15 @@
 package trees;
 
-public class TreeNode<T extends Comparable<T>> {
+public class BinaryNode<T extends Comparable<T>> implements TreeNodeADT<T>{
 
 	T element;
-	TreeNode<T> left, right, parent;
+	BinaryNode<T> left, right, parent;
 
-	public TreeNode(T element) {
+	public BinaryNode(T element) {
 		this.element = element;
 	}
 
+	@Override
 	public int getDesc() {
 		int count = 0;
 		if (left != null)
@@ -18,7 +19,7 @@ public class TreeNode<T extends Comparable<T>> {
 		return count;
 	}
 
-	public void cuelga(TreeNode<T> newNode) {
+	public void cuelga(BinaryNode<T> newNode) {
 		if (newNode == null)
 			return;
 		if (element.compareTo(newNode.getElement()) > 0)
@@ -35,37 +36,28 @@ public class TreeNode<T extends Comparable<T>> {
 		this.element = element;
 	}
 	
-	public TreeNode<T> getParent(){
+	public BinaryNode<T> getParent(){
 		return parent;
 	}
 	
-	public void setParent(TreeNode<T> parent) {
+	public void setParent(BinaryNode<T> parent) {
 		this.parent = parent;
 	}
 
-	public TreeNode<T> getLeft() {
+	public BinaryNode<T> getLeft() {
 		return left;
 	}
 
-	public void setLeft(TreeNode<T> left) {
+	public void setLeft(BinaryNode<T> left) {
 		this.left = left;
 	}
 
-	public TreeNode<T> getRight() {
+	public BinaryNode<T> getRight() {
 		return right;
 	}
 
-	public void setRight(TreeNode<T> right) {
+	public void setRight(BinaryNode<T> right) {
 		this.right = right;
-	}
-	
-	public int quantityOfChilds() {
-		int res = 0;
-		if(left != null)
-			res++;
-		if(right != null)
-			res++;
-		return res;
 	}
 
 }

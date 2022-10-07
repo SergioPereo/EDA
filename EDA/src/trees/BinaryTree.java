@@ -6,22 +6,30 @@ import java.util.Stack;
 
 public class BinaryTree<T extends Comparable<T>> implements TreeADT<T> {
 
-	TreeNode<T> root;
+	BinaryNode<T> root;
 
-	private void add(TreeNode<T> parent, TreeNode<T> actual, T element) {
+	private void add(BinaryNode<T> parent, BinaryNode<T> actual, T element, int side) {
 		if (actual != null)
 			if (actual.getElement().compareTo(element) > 0)
-				add(actual, actual.getLeft(), element);
+				add(actual, actual.getLeft(), element, -1);
 			else
-				add(actual, actual.getRight(), element);
+				add(actual, actual.getRight(), element, 1);
 		else {
-			actual = new TreeNode<T>(element);
-			actual.setParent(parent);
+			BinaryNode<T> newNode = new BinaryNode<T>(element);
+			if (parent == null) {
+				root = newNode;
+			} else {
+				newNode.setParent(parent);
+				if (side < 0)
+					parent.setLeft(newNode);
+				else
+					parent.setRight(newNode);
+			}
 		}
 	}
 
 	public void addI(T element) {
-		TreeNode<T> newElement = new TreeNode<T>(element), actual = root, father = actual;
+		BinaryNode<T> newElement = new BinaryNode<T>(element), actual = root, father = actual;
 		while (actual != null) {
 			father = actual;
 			if (actual.getElement().compareTo(element) > 0)
@@ -37,27 +45,27 @@ public class BinaryTree<T extends Comparable<T>> implements TreeADT<T> {
 	}
 
 	public void add(T element) {
-		add(null, root, element);
+		add(null, root, element, 0);
 	}
 
-	private void preorder(TreeNode<T> root, ArrayList<T> list) {
+	private void preOrder(BinaryNode<T> root, ArrayList<T> list) {
 		if (root != null) {
 			list.add(root.getElement());
-			preorder(root.getLeft(), list);
-			preorder(root.getRight(), list);
+			preOrder(root.getLeft(), list);
+			preOrder(root.getRight(), list);
 		}
 	}
 
-	public Iterator<T> preorder() {
+	public Iterator<T> preOrder() {
 		ArrayList<T> list = new ArrayList<T>();
-		preorder(root, list);
+		preOrder(root, list);
 		return list.iterator();
 	}
 
-	public Iterator<T> preorderI() {
+	public Iterator<T> preOrderI() {
 		ArrayList<T> list = new ArrayList<T>();
-		TreeNode<T> actual;
-		Stack<TreeNode<T>> stack = new Stack<TreeNode<T>>();
+		BinaryNode<T> actual;
+		Stack<BinaryNode<T>> stack = new Stack<BinaryNode<T>>();
 		stack.add(root);
 		while (!stack.isEmpty()) {
 			actual = stack.pop();
@@ -72,49 +80,49 @@ public class BinaryTree<T extends Comparable<T>> implements TreeADT<T> {
 
 	public Iterator<T> perLevelorderI() {
 		ArrayList<T> list = new ArrayList<T>();
-		TreeNode<T> actual;
-		ArrayList<TreeNode<T>> queue = new ArrayList<TreeNode<T>>();
+		BinaryNode<T> actual;
+		ArrayList<BinaryNode<T>> queue = new ArrayList<BinaryNode<T>>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
 			actual = queue.remove(0);
 			list.add(actual.getElement());
+			if (actual.getLeft() != null)
+				queue.add(actual.getLeft());
 			if (actual.getRight() != null)
 				queue.add(actual.getRight());
-			if (actual.getLeft() != null)
-				queue.add(actual.getRight());
 		}
 		return list.iterator();
 	}
 
-	private void inorder(TreeNode<T> root, ArrayList<T> list) {
+	private void inOrder(BinaryNode<T> root, ArrayList<T> list) {
 		if (root != null) {
-			inorder(root.getLeft(), list);
+			inOrder(root.getLeft(), list);
 			list.add(root.getElement());
-			inorder(root.getRight(), list);
+			inOrder(root.getRight(), list);
 		}
 	}
 
-	public Iterator<T> inorder() {
+	public Iterator<T> inOrder() {
 		ArrayList<T> list = new ArrayList<T>();
-		inorder(root, list);
+		inOrder(root, list);
 		return list.iterator();
 	}
 
-	private void postorder(TreeNode<T> root, ArrayList<T> list) {
+	private void postOrder(BinaryNode<T> root, ArrayList<T> list) {
 		if (root != null) {
-			postorder(root.getLeft(), list);
-			postorder(root.getRight(), list);
+			postOrder(root.getLeft(), list);
+			postOrder(root.getRight(), list);
 			list.add(root.getElement());
 		}
 	}
 
-	public Iterator<T> postorder() {
+	public Iterator<T> postOrder() {
 		ArrayList<T> list = new ArrayList<T>();
-		postorder(root, list);
+		postOrder(root, list);
 		return list.iterator();
 	}
 
-	private int height(TreeNode<T> actual) {
+	private int height(BinaryNode<T> actual) {
 		if (actual != null)
 			return 1 + Math.max(height(root.getLeft()), height(root.getRight()));
 		return 0;
@@ -124,86 +132,86 @@ public class BinaryTree<T extends Comparable<T>> implements TreeADT<T> {
 		return height(root);
 	}
 
-	private TreeNode<T> getSucessorInOrderR(TreeNode<T> actual) {
-		if (actual != null)
-			getSucessorInOrderR(actual.getLeft());
+	private BinaryNode<T> getSucessorInOrderR(BinaryNode<T> actual) {
+		if (actual.getLeft() != null)
+			return getSucessorInOrderR(actual.getLeft());
 		return actual;
 	}
 
-	private TreeNode<T> getSucessorInOrder(TreeNode<T> root) {
-		return getSucessorInOrderR(root.getRight());
+	private BinaryNode<T> getSucessorInOrder(BinaryNode<T> actual) {
+		return getSucessorInOrderR(actual.getRight());
 	}
 
-	private void swapValues(TreeNode<T> a, TreeNode<T> b) {
+	private void swapValues(BinaryNode<T> a, BinaryNode<T> b) {
 		T temp = a.getElement();
 		a.setElement(b.getElement());
 		b.setElement(temp);
 	}
 
-	public TreeNode<T> delete(TreeNode<T> parent, TreeNode<T> actual, T element) {
-		TreeNode<T> res = null;
-		if (actual == null)
-			return actual;
-		if (actual.getElement().equals(element)) {
-			res = actual;
-			if (actual.getLeft() == null && actual.getRight() == null) {
-				if (parent == null) {
-					root = null;
-				} else {
-					if (actual == parent.getLeft())
-						parent.setLeft(null);
-					else
-						parent.setRight(null);
-				}
-			} else if (actual.getLeft() == null || actual.getRight() == null) {
-				if (actual == parent.getLeft())
-					if (actual.getLeft() != null)
-						parent.setLeft(actual.getLeft());
-					else
-						parent.setLeft(actual.getRight());
-				else {
-					if (actual.getLeft() != null)
-						parent.setRight(actual.getLeft());
-					else
-						parent.setRight(actual.getRight());
-				}
-			} else {
-				TreeNode<T> sucessorIO = getSucessorInOrder(actual);
-				swapValues(actual, sucessorIO);
-				if (sucessorIO == sucessorIO.getParent().getLeft())
-					if (sucessorIO.getLeft() != null)
-						sucessorIO.getParent().setLeft(sucessorIO.getRight());
-					else {
-						sucessorIO.getParent().setRight(sucessorIO.getRight());
-					}
+	public BinaryNode<T> delete(BinaryNode<T> actual){
+		BinaryNode<T> parent = actual.getParent();
+		if(actual.getLeft() == null && actual.getRight() == null) {
+			if(parent == null)
+				root = null;
+			else {
+				if(parent.getLeft() == actual)
+					parent.setLeft(null);
+				else
+					parent.setRight(null);
 			}
-			return res;
+		} else if(actual.getLeft() == null || actual.getRight() == null) {
+			if (actual == parent.getLeft())
+				if (actual.getLeft() != null) {
+					parent.setLeft(actual.getLeft());
+					actual.getLeft().setParent(parent);
+				}
+				else {
+					parent.setLeft(actual.getRight());
+					actual.getRight().setParent(parent);
+				}
+			else {
+				if (actual.getLeft() != null) {
+					parent.setRight(actual.getLeft());	
+					actual.getLeft().setParent(parent);
+				}
+				else {
+					parent.setRight(actual.getRight());
+					actual.getRight().setParent(parent);
+				}
+			}
+		} else {
+			BinaryNode<T> sucessorIO = getSucessorInOrder(actual);
+			swapValues(actual, sucessorIO);
+			delete(sucessorIO);
 		}
-		res = delete(actual, actual.getLeft(), element);
-		if (res == null)
-			res = delete(actual, actual.getRight(), element);
-		return res;
+		return actual;
 	}
 
-	public TreeNode<T> delete(T element) {
-		return delete(null, root, element);
+	public BinaryNode<T> delete(T element) {
+		BinaryNode<T> toDelete = find(root, element);
+		if (toDelete == null) {
+			return null;
+		}
+		return delete(toDelete);
 	}
 
-	private TreeNode<T> find(TreeNode<T> actual, T element) {
-		TreeNode<T> res = null;
+	private BinaryNode<T> find(BinaryNode<T> actual, T element) {
+		BinaryNode<T> res = null;
 		if (actual == null)
 			return actual;
-		if (actual.getElement().equals(element))
-			return actual;
-		res = find(actual.getLeft(), element);
-		if (res == null)
+		int compare = actual.getElement().compareTo(element);
+		if (compare > 0)
+			res = find(actual.getLeft(), element);
+		else if(compare < 0)
 			res = find(actual.getRight(), element);
+		else
+			return actual;
 		return res;
 	}
 
 	@Override
 	public boolean find(T element) {
-		TreeNode<T> actual = find(root, element);
+		BinaryNode<T> actual = find(root, element);
 		return actual != null;
 	}
 
@@ -215,8 +223,7 @@ public class BinaryTree<T extends Comparable<T>> implements TreeADT<T> {
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return root == null;
 	}
 
 }
