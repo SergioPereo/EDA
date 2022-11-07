@@ -81,12 +81,17 @@ public class AVLTree<T extends Comparable<T>> implements TreeADT<T> {
 			rr.calcWHeight();
 			r.calcWHeight();
 		} else {
-			AVLNode<T> right = toRot.getRight();
+			AVLNode<T> right = toRot.getRight(), store = null;
+			if(right.getLeft().getRight() != null)
+				store = right.getLeft().getRight();
 			toRot.setRight(right.getLeft());
 			right.getLeft().setParent(toRot);
 			toRot.getRight().setRight(right);
 			right.setParent(toRot.getRight());
-			right.setLeft(null);
+			right.setLeft(store);
+			if(store != null) {
+				store.setParent(right);
+			}
 			right.calcWHeight();
 			toRot.getRight().calcWHeight();
 			rotate(toRot, eBalance);

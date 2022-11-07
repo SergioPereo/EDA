@@ -358,7 +358,7 @@ public class Main {
 	 */
 	public static void sortTest() {
 		Integer[] arr = { 4, -2, 5, 100, -234, 2, 1, 5, 3, 64, -234, 4, 24, 3, 5, 35, -350 };
-		count = Sorts.mergeMixSort(arr);
+		count = Sorts.heapSort(arr);
 		printArray(arr);
 		System.out.println("Execution times: " + count);
 	}
@@ -370,9 +370,9 @@ public class Main {
 	 */
 	public static void comparisonSortingTest() {
 		Integer arr[] = Tests.generateArray(10000, 100000000);
-		TestResponse[] a = Tests.mergeMixSortTest(arr);
+		TestResponse[] a = Tests.heapSortTest(arr);
 		TestResponse[] b = Tests.mergeSortTest(arr);
-		printComparison(Tests.checkWhosBetter(a, b, 3, 10));
+		printComparison(Tests.checkWhosBetter(a, b, 3, 0));
 	}
 
 	/**
@@ -413,35 +413,40 @@ public class Main {
 		Movie[] toSort = (Movie[]) Tests.generateArrayCopy(movies);
 
 		TestResponse[][] bubble = new TestResponse[runs][];
-		TestResponse[][] selection = new TestResponse[runs][];
-		TestResponse[][] insertion = new TestResponse[runs][];
-		TestResponse[][] quick = new TestResponse[runs][];
+		//TestResponse[][] selection = new TestResponse[runs][];
+		//TestResponse[][] insertion = new TestResponse[runs][];
+		//TestResponse[][] quick = new TestResponse[runs][];
 		TestResponse[][] merge = new TestResponse[runs][];
-		TestResponse[][] mergeMix = new TestResponse[runs][];
+		//TestResponse[][] mergeMix = new TestResponse[runs][];
 
 		for (int i = 0; i < runs; i++) {
 			System.out.println("Doing the " + i + " run...");
 			Tests.shuffleArray(toSort);
-			bubble[i] = Tests.bubbleSortTest(toSort);
+			bubble[i] = Tests.heapSortTest(toSort);
+			/*
 			Tests.shuffleArray(toSort);
 			selection[i] = Tests.selectionSortTest(toSort);
 			Tests.shuffleArray(toSort);
 			insertion[i] = Tests.insertionSortTest(toSort);
 			Tests.shuffleArray(toSort);
 			quick[i] = Tests.quickSortTest(toSort);
+			*/
+			
 			Tests.shuffleArray(toSort);
 			merge[i] = Tests.mergeSortTest(toSort);
+			/*
 			Tests.shuffleArray(toSort);
 			mergeMix[i] = Tests.mergeMixSortTest(toSort);
+			*/
 		}
 
 		System.out.println("Doing averages...");
-		generateCsv("Bubble sort", averageOfTests(bubble, runs));
-		generateCsv("Selection sort", averageOfTests(selection, runs));
-		generateCsv("Insertion sort", averageOfTests(insertion, runs));
-		generateCsv("Quick sort", averageOfTests(quick, runs));
+		generateCsv("Heap sort", averageOfTests(bubble, runs));
+		//generateCsv("Selection sort", averageOfTests(selection, runs));
+		//generateCsv("Insertion sort", averageOfTests(insertion, runs));
+		//generateCsv("Quick sort", averageOfTests(quick, runs));
 		generateCsv("Merge sort", averageOfTests(merge, runs));
-		generateCsv("Merge Mixcoac sort", averageOfTests(mergeMix, runs));
+		//generateCsv("Merge Mixcoac sort", averageOfTests(mergeMix, runs));
 	}
 
 	public static void getInvSortedArrayTests(Movie[] movies) {
@@ -491,6 +496,46 @@ public class Main {
 		generateCsv("Merge sort", merge);
 		generateCsv("Merge Mixcoac sort", mergeMix);
 	}
+	
+	public static void switchFor(Integer[] toSort, int i, double noisyFactor) {
+		if(i==0) {
+			Sorts.bubbleSort(toSort, noisyFactor);
+		} else if(i == 1) {
+			Sorts.selectionSort(toSort, noisyFactor);
+		} else if(i == 2) {
+			Sorts.insertionSort(toSort, noisyFactor);
+		} else if(i == 3) {
+			Sorts.quickSort(toSort, noisyFactor);
+		} else if(i == 4) {
+			Sorts.mergeSort(toSort, noisyFactor);
+		} else if(i == 5) {
+			Sorts.mergeMixSort(toSort, noisyFactor);
+		} else if(i == 6) {
+			Sorts.heapSort(toSort, noisyFactor);
+		}
+	}
+	
+	public static void noisyCompareTest() {
+		Integer arr[] = Tests.generateArray(10000, 100000000);
+		Integer sortedArr[] = arr.clone();
+		Sorts.mergeSort(sortedArr);
+		Integer toSort[][] = new Integer[7][];
+		System.out.println("Sorted");
+		printArray(sortedArr);
+		int results[] = new int[7];
+		for(int i = 0 ; i < toSort.length ; i++) {
+			toSort[i] = arr.clone();
+			switchFor(toSort[i], i, 0.3d);
+		}
+		for(int i = 0 ; i < toSort.length ; i++) {
+			printArray(toSort[i]);
+			System.out.println();
+			printArray(sortedArr);
+			System.out.println();
+			results[i] = Sorts.optLev(toSort[i], sortedArr);
+		}
+		printArray(results);
+	}
 
 	public static Movie[] readFile() {
 		ArrayList<Movie> moviesList = new ArrayList<Movie>();
@@ -519,10 +564,10 @@ public class Main {
 		// permutationsTest();
 
 		// Levshtein Distance
-		// levTest();
+		//levTest();
 
 		// Sorting
-		// sortTest();
+		//sortTest();
 
 		// Previews
 		// previewSortingTest();
@@ -534,7 +579,10 @@ public class Main {
 		// Homework
 		//getRandomTests(readFile(), 30);
 		//getInvSortedArrayTests(readFile());
-		getSortedArrayTests(readFile());
+		//getSortedArrayTests(readFile());
+		
+		//sortTest();
+		noisyCompareTest();
 	}
 
 }

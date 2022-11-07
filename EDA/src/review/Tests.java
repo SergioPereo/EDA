@@ -212,6 +212,30 @@ public class Tests {
 		}
 		return res;
 	}
+	
+	/**
+	 * Public method that makes a test set for the heap sort algorithm.
+	 * This probably need to be more parametrized. Because you need an algorithm
+	 * with at least 1000 elements so this can be useful.
+	 *
+	 * @param arr array used to make the set.
+	 * @return the test set of the algorithm
+	 */
+	public static <T extends Comparable<T>> TestResponse[] heapSortTest(T[] arr) {
+		Instant startTime, endTime;
+		int count = 0;
+		T[] testCase;
+		TestResponse[] res = new TestResponse[arr.length/500];
+		for (int i = 0; i < arr.length/500; i += 1) {
+			testCase = (T[]) new Comparable[i*500];
+			copyPartitionArray(arr, testCase, i*500);
+			startTime = Instant.now();
+			count = Sorts.heapSort(testCase);
+			endTime = Instant.now();
+			res[i] = new TestResponse(Duration.between(startTime, endTime), testCase.length, count);
+		}
+		return res;
+	}
 
 	/**
 	 * Private method that generates an array of random positive integers between 0
